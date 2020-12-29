@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <img class="home-logo" src="assets/img/app/logo-negative.svg" />
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher
+    (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="wrapper">
+
+    <div class="card locations">
+      <ion-item-divider>
+        <div class="title locations-title" item-start>
+          <img
+            src="assets/img/icon-bitcoin-bag.svg"
+            alt="Nearest GC ATM locations"
+            width="18"
+          />
+          <span translate>Closest GetCoins ATMs</span>
+        </div>
+      </ion-item-divider>
+      <ion-card-content class="locations-content">
+        <p *ngIf="loading">Loading...</p>
+        <ion-list *ngIf="newResultsReady">
+          <div *ngIf="newResultsReady || newResults !== null">
+            <button ion-item>            
+<!--             <button
+              ion-item
+              *ngFor="let data of (newResults | slice: 0:10); let i = index"
+              (click)="goToLocationDetails(data.id, data)"
+            > -->
+              <ion-avatar item-start>
+                <img [src]="data.img" />
+                <span
+                  class="miles"
+                  *ngIf="myLocation.lat !== 0 && myLocation.lng !== 0"
+                >
+                  <span class="miles_num">{{
+                    data.distanceMiles | number: '1.1-1'
+                  }}</span
+                  >mil
+                </span>
+              </ion-avatar>
+              <h3>{{ data.title }}</h3>
+              <p>
+                {{ data.street }} {{ data.city }}, {{ data.state }}
+                {{ data.zipcode }}
+              </p>
+            </button>
+            <button ion-button full primary (click)="searchAgain()">
+              Search Again
+            </button>
+          </div>
+        </ion-list>
+      </ion-card-content>
+    </div>
+
+  </div>
+</ion-content>

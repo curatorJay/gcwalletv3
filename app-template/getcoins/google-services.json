@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "54661713056",
+    "firebase_url": "https://getcoins-wallet-gcwallet.firebaseio.com",
+    "project_id": "getcoins-wallet-gcwallet",
+    "storage_bucket": "getcoins-wallet-gcwallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54661713056:android:306acb1a6781cae4",
+        "android_client_info": {
+          "package_name": "com.getcoins.gcwallet2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54661713056-s8jcdg189buolsj9af5i0uf949lic1mk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdIpFeTsOvZdCw2CSRwEJrGrv22pX9Ffw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "2"
+}

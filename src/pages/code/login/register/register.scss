@@ -1,0 +1,58 @@
+page-register {
+   & > ion-content {
+    background-image: $login-background-image !important;
+    background-position:  center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .text-input::-moz-placeholder {
+    color: white;
+  }
+
+  .text-input:-ms-input-placeholder {
+    color: white;
+  }
+
+  .text-input::-webkit-input-placeholder {
+    text-indent: 0;
+    color: white;
+  }
+
+  .list-button {
+    margin-top: 1rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    .item-inner {
+      border: none !important;
+    }
+  }
+
+  ion-input:focus {
+    border-bottom: 1px solid white;
+  }
+
+  .header-container {
+    .title {
+      // color: color($colors, danger);
+      font-size: 20px;
+      text-align: center;
+    }
+    .subtitle {
+      padding: 20px;
+      text-align: center;
+    }
+  }
+
+  .join-icon {
+    img {
+      padding: 6px;
+    }
+  }
+  
+  .import-icon {
+    img {
+      padding: 0px;
+    }
+  }
+}

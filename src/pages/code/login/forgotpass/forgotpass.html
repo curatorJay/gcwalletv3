@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <!-- <img class="home-logo" src="assets/img/app/logo-negative.svg" /> -->
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+  <form [formGroup]="createForm" class="card" class="button-standard">
+    <div class="header-container">
+      <div>
+        <div class="header" padding>
+          <div class="title" padding translate><img class="home-logo" src="assets/img/app/logo-negative.svg" /> </div>
+        </div>
+      </div>
+    </div>
+    <!-- <ion-item > -->
+      <!-- <ion-label stacked>{{ 'Phone' | translate }}</ion-label> -->
+      <ion-input
+        *ngIf="phone"
+        type="text"
+        formControlName="phone"
+        placeholder="{{'Enter Phone Number'| translate}}"
+      ></ion-input>
+    <!-- </ion-item> -->
+    <!-- <ion-row style="height: 10px"></ion-row> -->
+    <!-- <ion-item-divider></ion-item-divider> -->
+    <div *ngIf="otp">
+      <!-- <ion-item> -->
+        <!-- <ion-label stacked>{{ 'OTP' | translate }}</ion-label> -->
+        <ion-input
+          type="password"
+          formControlName="otp"
+          placeholder="{{'OTP'| translate}}"
+        ></ion-input>
+      <!-- </ion-item> -->
+      <ion-row style="height: 10px"></ion-row>
+      <!-- <ion-item> -->
+        <!-- <ion-label stacked>{{ 'Pin' | translate }}</ion-label> -->
+        <ion-input
+          type="password"
+          formControlName="pin"
+          placeholder="{{'Enter pin'| translate}}"
+        ></ion-input>
+      <!-- </ion-item> -->
+    </div>
+
+    
+
+    <ion-row style="height: 10px"></ion-row>
+    <!-- <ion-item-divider></ion-item-divider> -->
+
+    <button ion-button class="button-standard" (click)="Proceed()">
+          {{ Register | translate }}
+    </button>
+  </form>
+</ion-content>
+

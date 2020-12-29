@@ -1,0 +1,241 @@
+page-home {
+  background: $toolbar-background;
+  ion-content .fixed-content {
+    background: $toolbar-background;
+  }
+  .home-logo {
+    height: 51px; //**GC edit
+    padding: 2px 0; //**GC edit
+    position: relative;
+    top: 3px;
+  }
+  .toolbar-title-ios {
+    text-align: center;
+  }
+  .check {
+    text-align: center;
+    .title {
+      font-weight: 500;
+      font-size: 2rem;
+      color: color($colors, grey);
+    }
+    .subtitle {
+      padding: 10px;
+    }
+    .check-icon {
+      margin-top: -40px;
+    }
+  }
+  .title {
+    font-weight: 500;
+    > img {
+      vertical-align: sub;
+      margin-right: 5px;
+    }
+    &.-title {
+      margin-top: 15px;
+    }
+  }
+  .error {
+    color: color($colors, danger);
+  }
+
+  .wallet-ready {
+    padding: 0rem;
+    margin-bottom: 3rem;
+    .row {
+      justify-content: flex-end;
+      button {
+        font-size: 12px;
+      }
+    }
+  }
+
+  page-wallet-activity,
+  page-txp {
+    @media (max-width: 350px) {
+      .item-title {
+        font-size: 13px;
+      }
+      ion-note .date {
+        font-size: 11.5px;
+      }
+    }
+  }
+
+  page-txp:last-child,
+  page-wallet-activity:last-child {
+    border: 0;
+
+    & .item-inner {
+      border: 0 !important;
+    }
+  }
+  .card {
+    z-index: 1;
+    position: relative;
+  }
+  ion-refresher {
+    height: 120px;
+    background: $toolbar-background;
+    &-content {
+      margin-top: -25px;
+    }
+  }
+
+  .new-release {
+    padding-bottom: 0rem;
+    &-icon {
+      display: flex;
+      justify-content: center;
+      margin-top: 3rem;
+      img {
+        width: 4rem;
+        height: 4rem;
+      }
+    }
+    &-text {
+      text-align: center;
+      color: color($colors, dark);
+      margin-bottom: 1rem;
+    }
+    &-button {
+      padding: 0rem;
+      div {
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: color($colors, light);
+        color: color($colors, dark);
+        height: 5rem;
+      }
+    }
+  }
+
+  .scroll-content {
+    // This line prevents an ugly gap from appearing between the
+    // navbar and page content when the user overscrolls on iOS
+    background-image: linear-gradient(
+      to bottom,
+      $toolbar-background,
+      $toolbar-background 50%,
+      $background-color 50%,
+      $background-color 50%,
+      $background-color 50%
+    );
+  }
+  button[full] {
+    background: $color-secondary;
+    margin: 20px 0 0 0;
+  }
+  .item-md .item-button {
+    height: 2.8em;
+  }
+  .item-ios .item-button {
+    height: 2.8em;
+  }
+  .card.support,
+  .card.locations {
+    // .item-ios [item-left],
+    // .item-ios [item-start] {
+    //   // &-title {
+    //   margin-top: 15px;
+    // }
+    // .item-divider{
+    //   margin
+    // }
+    .item-md {
+      ion-avatar,
+      ion-thumbnail {
+        &[item-left],
+        &[item-start] {
+          margin: 8px 20px 8px 4px;
+        }
+      }
+      // ion-thumbnail {
+      //   &[item-left],
+      //   &[item-start] {
+      //     margin: 8px 18px 8px 6px;
+      //   }
+      // }
+      ion-avatar {
+        ion-img,
+        img {
+          margin: 0 auto 3px auto;
+        }
+        .miles {
+          padding: 5px auto;
+          font-size: 1.2rem;
+          &_num {
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+    .item-block {
+      padding-left: 8px;
+    }
+    .item-ios {
+      ion-avatar {
+        &[item-left],
+        &[item-start] {
+          margin: 8px 22px 8px 2px;
+        }
+        ion-img,
+        img {
+          margin: 0 auto 3px auto;
+        }
+        .miles {
+          padding: 5px auto;
+          font-size: 1.2rem;
+          &_num {
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+    .list-ios > .item-block:first-child {
+      border-top: 0px; //** rid of the double lines overwrapped with the ion-item top border
+    }
+    .item-divider {
+      margin-bottom: 0; //** rid of the extra margin that is off
+    }
+    ion-item-divider {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid $gray-200;
+      &.item-md {
+        padding-top: 13px;
+        padding-bottom: 10px;
+      }
+    }
+    .locations-content {
+      .ask-refresh {
+        padding-top: 10px;
+      }
+    }
+    ion-card-content {
+      ion-list {
+        // padding: 8px;
+        margin-bottom: 0px;
+        ion-item {
+          padding: 0 0 0 8px;
+          .item-inner {
+            margin-left: 5px;
+          }
+        }
+        ion-icon {
+          margin: 0px 16px 4px 0;
+        }
+      }
+      // .input-wrapper {
+      //   padding-bottom: 0;
+      // }
+      // .item-block {
+      //   padding: 0px;
+      // }
+    }
+  }
+}

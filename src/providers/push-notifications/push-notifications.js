@@ -1,0 +1,171 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { FCM } from '@ionic-native/fcm';
+import { Events } from 'ionic-angular';
+import { Logger } from '../../providers/logger/logger';
+// providers
+import { AppProvider } from '../app/app';
+import { BwcProvider } from '../bwc/bwc';
+import { ConfigProvider } from '../config/config';
+import { PlatformProvider } from '../platform/platform';
+import { ProfileProvider } from '../profile/profile';
+import * as _ from 'lodash';
+let PushNotificationsProvider = class PushNotificationsProvider {
+    constructor(http, profileProvider, platformProvider, configProvider, logger, appProvider, bwcProvider, FCMPlugin, events) {
+        this.http = http;
+        this.profileProvider = profileProvider;
+        this.platformProvider = platformProvider;
+        this.configProvider = configProvider;
+        this.logger = logger;
+        this.appProvider = appProvider;
+        this.bwcProvider = bwcProvider;
+        this.FCMPlugin = FCMPlugin;
+        this.events = events;
+        this._token = null;
+        this.logger.info('PushNotificationsProvider initialized.');
+        this.isIOS = this.platformProvider.isIOS;
+        this.isAndroid = this.platformProvider.isAndroid;
+        this.usePushNotifications = this.platformProvider.isCordova;
+    }
+    init() {
+        if (!this.usePushNotifications || this._token)
+            return;
+        this.configProvider.load().then(() => {
+            if (!this.configProvider.get().pushNotificationsEnabled)
+                return;
+            this.logger.debug('Starting push notification registration...');
+            // Keep in mind the function will return null if the token has not been established yet.
+            this.FCMPlugin.getToken().then(token => {
+                this.logger.debug('Get token for push notifications: ' + token);
+                this._token = token;
+                this.enable();
+                this.handlePushNotifications();
+            });
+        });
+    }
+    handlePushNotifications() {
+        if (this.usePushNotifications) {
+            this.FCMPlugin.onTokenRefresh().subscribe(token => {
+                if (!this._token)
+                    return;
+                this.logger.debug('Refresh and update token for push notifications...');
+                this._token = token;
+                this.enable();
+            });
+            this.FCMPlugin.onNotification().subscribe(data => {
+                if (!this._token)
+                    return;
+                this.logger.debug('New Event Push onNotification: ' + JSON.stringify(data));
+                if (data.wasTapped) {
+                    // Notification was received on device tray and tapped by the user.
+                    var walletIdHashed = data.walletId;
+                    if (!walletIdHashed)
+                        return;
+                    this._openWallet(walletIdHashed);
+                }
+                else {
+                    // TODO
+                    // Notification was received in foreground. Maybe the user needs to be notified.
+                }
+            });
+        }
+    }
+    updateSubscription(walletClient) {
+        if (!this._token) {
+            this.logger.warn('Push notifications disabled for this device. Nothing to do here.');
+            return;
+        }
+        this._subscribe(walletClient);
+    }
+    enable() {
+        if (!this._token) {
+            this.logger.warn('No token available for this device. Cannot set push notifications. Needs registration.');
+            return;
+        }
+        var wallets = this.profileProvider.getWallets();
+        _.forEach(wallets, walletClient => {
+            this._subscribe(walletClient);
+        });
+    }
+    disable() {
+        if (!this._token) {
+            this.logger.warn('No token available for this device. Cannot disable push notifications.');
+            return;
+        }
+        var wallets = this.profileProvider.getWallets();
+        _.forEach(wallets, walletClient => {
+            this._unsubscribe(walletClient);
+        });
+        this._token = null;
+    }
+    unsubscribe(walletClient) {
+        if (!this._token)
+            return;
+        this._unsubscribe(walletClient);
+    }
+    _subscribe(walletClient) {
+        let opts = {
+            token: this._token,
+            platform: this.isIOS ? 'ios' : this.isAndroid ? 'android' : null,
+            packageName: this.appProvider.info.packageNameId
+        };
+        walletClient.pushNotificationsSubscribe(opts, err => {
+            if (err)
+                this.logger.error(walletClient.name + ': Subscription Push Notifications error. ', JSON.stringify(err));
+            else
+                this.logger.debug(walletClient.name + ': Subscription Push Notifications success.');
+        });
+    }
+    _unsubscribe(walletClient) {
+        walletClient.pushNotificationsUnsubscribe(this._token, err => {
+            if (err)
+                this.logger.error(walletClient.name + ': Unsubscription Push Notifications error. ', JSON.stringify(err));
+            else
+                this.logger.debug(walletClient.name + ': Unsubscription Push Notifications Success.');
+        });
+    }
+    _openWallet(walletIdHashed) {
+        let walletIdHash;
+        let sjcl = this.bwcProvider.getSJCL();
+        let nextView = {};
+        let wallets = this.profileProvider.getWallets();
+        let wallet = _.find(wallets, w => {
+            walletIdHash = sjcl.hash.sha256.hash(w.credentials.walletId);
+            return _.isEqual(walletIdHashed, sjcl.codec.hex.fromBits(walletIdHash));
+        });
+        if (!wallet)
+            return;
+        if (!wallet.isComplete()) {
+            nextView.name = 'CopayersPage';
+            return;
+        }
+        else {
+            nextView.name = 'WalletDetailsPage';
+            nextView.params = { walletId: wallet.credentials.walletId };
+        }
+        this.events.publish('OpenWalletEvent', nextView);
+    }
+};
+PushNotificationsProvider = __decorate([
+    Injectable(),
+    __metadata("design:paramtypes", [HttpClient,
+        ProfileProvider,
+        PlatformProvider,
+        ConfigProvider,
+        Logger,
+        AppProvider,
+        BwcProvider,
+        FCM,
+        Events])
+], PushNotificationsProvider);
+export { PushNotificationsProvider };
+//# sourceMappingURL=push-notifications.js.map
